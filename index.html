@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Map with Markers</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        #map {
+            width: 600px;
+            height: 600px;
+        }
+        .popup{
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="map"></div>
+</body>
+<script>
+
+    const map = L.map('map');
+    map.setView([52.488, -0.89], 7);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', 
+    {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+
+    const data = {
+        gatwick: {
+            coords: [51.1539, -0.182],
+            title: "Gatwick Airport",
+            address: `
+            <b>Gatwick Airport</b><br>
+            123<br>
+            London<br>`,
+            website: 'https://www.gatwickairport.com/',
+            phone: 123,
+        },
+        manchester: {
+            coords: [53.3502, -2.2803],
+            title: "Manchester Airport",
+            address: `
+            <b>Manchester Airport</b><br>
+            123<br>
+            Manchester<br>`,
+            website: 'https://www.manchesterairport.co.uk/',
+            phone: 123,
+        },
+        heathrow: {
+            coords: [51.4712, -0.4599],
+            title: "Heathrow Airport",
+            address: `
+            <b>Heathrow Airport</b><br>
+            123<br>
+            London<br>`,
+            website: 'https://www.heathrow.com/',
+            phone: 123,
+        }
+    }
+
+    const customIcon = L.icon({
+        iconUrl: './airport.svg',
+        iconSize: [50, 50],
+    })
+    for(let key in data){
+
+       const airport = data[key];
+
+        L.marker(airport.coords, {
+            title: airport.title,
+            icon: customIcon,
+        })
+        .bindPopup(`
+            <span class="popup">
+                ${airport.address}
+                <a href="${airport.website}" target="_blank">Website</a><br>
+                Call: <a href="tel:${airport.phone}">${airport.phone}</a>
+            </span>
+        `)
+        .addTo(map)
+    }
+    
+
+</script>
+
+</html>
